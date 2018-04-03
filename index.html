@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>OSU SEARCHER</title>
+    <link rel="icon" href="https://commons.wikimedia.org/wiki/File:Osu!Logo_(2015).png">
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        header{
+            padding: 10px;
+            text-align: center;
+            font-size: 2em;
+            font-weight: 600;
+            background-color:#62cdff;
+            color: #fff;
+        }
+        body{
+            font-family: Arial;
+            background-color: #f1f1f1;
+        }
+        #search-field{
+            background-color: #fc8ae3;
+            padding: 10px;
+        }
+        #search-field input, #search-field button{
+            padding: 5px;
+        }
+        #search-field button{
+            padding: 5px 15px;
+            border: 2px solid #fff;
+            background-color: #ff63dc;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 300ms, color 300ms;
+        }
+        #search-field button:hover{
+            transition: background-color 300ms, color 300ms;
+            background-color: #fff;
+            color: #ff63dc;
+        }
+        #result{
+            display: flex;
+            background-color: #fff;
+            width: 90%;
+            margin: 5px auto;
+        }
+        #result img{
+            height: 150px;
+            width: 150px;
+        }
+        #result ul{
+            list-style: none;
+            padding-top: 50px;
+            padding-left: 15px;
+        }
+
+        .pp-message{
+            background-color: #ff63dc;
+            padding: 0 5px;
+            font-size: .7em;
+            color: #fff;
+        }
+        footer{
+            background-color: #111;
+            color: #fff;
+            position: fixed;
+            padding: 10px;
+            right: 10px;
+            bottom: 10px;
+            font-size: .8em;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Osu! Search Engine
+    </header>
+    <section id="search-field">
+        <input type="text" id="user" placeholder="Find Player">
+        <button id="button">Search</button>
+    </section>
+    <div id="result">
+
+    </div>
+    
+
+    <footer>
+        <p>Created By Keiji Mizumura</p>
+        <p>Copyright &copy; 2018</p>
+    </footer>
+
+    <script>
+        document.getElementById('button').addEventListener('click',searchPlayer);
+        
+        function searchPlayer(){
+
+            var xhr = new XMLHttpRequest();
+            
+            var user = document.getElementById('user').value;
+
+            xhr.open('GET','https://osu.ppy.sh/api/get_user?k=52ae0ab0149244476e7bcc8f297b665ea69a6020&u='+user,true);
+            
+            xhr.onload = function () {
+                console.log("READYSTATE: ", xhr.readyState);
+                if (this.status == 200) {
+                    var user = JSON.parse(this.responseText);
+                    var avatar = "http://a.ppy.sh/" + user[0].user_id;
+                    var ppMessage = commentPP(user[0].pp_raw);
+                    
+                    var output =
+                    `
+                    <img src="${avatar}" alt="avatar">
+                    <ul>
+                        <li><b>Username</b>: ${user[0].username}</li>
+                        <li><b>Rank</b>: ${user[0].pp_rank}</li>
+                        <li><b>PP</b>: ${user[0].pp_raw} &nbsp;&nbsp; <span class="pp-message">${ppMessage}</span></li>
+                    </ul>
+                    `;
+                    document.getElementById("result").innerHTML = output;
+
+                }
+                else if (this.status == 404) {
+                    document.getElementById('text').innerText = "404 NOT FOUND";
+                    alert("WTF");
+                }
+                else if(this.status == 403){
+                    alert("WTF");
+                }
+            }
+
+            xhr.onerror = function(){
+                console.log("An error occured");
+                alert("NANI ZA PAK!");
+            }
+
+            xhr.send();
+
+        }
+
+        function commentPP(pp){
+            if(pp < 1000){
+                return "NOOB";
+            }
+            else if(pp < 2000){
+                return "Beginner";
+            }
+            else if(pp < 3000){
+                return "Intermediate";
+            }
+            else if(pp < 4000){
+                return "Farmer";
+            }
+            else if(pp < 5000){
+                return "DT Farmer";
+            }
+            else if(pp < 6000){
+                return "Advance";
+            }
+            else if(pp < 7000){
+                return "No life";
+            }
+            else if(pp < 8000){
+                return "HDHR!";
+            }
+            else if(pp < 9000){
+                return "Susej Tsirhc!";
+            }
+            else if(pp < 10000){
+                return "WOW! FARM MORE!";
+            }
+            else if(pp < 11000){
+                return "Stop Farming!";
+            }
+            else if(pp < 12000){
+                return "Eating PP?";
+            }
+            else if(pp < 13000){
+                return "Pro Level";
+            }
+            else if(pp < 14000){
+                return "TOP 10!?";
+            }
+            else if(pp < 15000){
+                return "HAIL COOKIEZI!";
+            }
+        }
+        
+    </script>
+</body>
+</html>
