@@ -20,16 +20,69 @@ body{
     background-color: #444;
     height: 100%;
     width: 100%;
+    overflow-x: hidden;
 }
 
 #sidebar{
     width: 60%;
     height: 100%;
+
     left: -60%;
+
     position: fixed;
     top: 0;
     background-color: var(--primary);
     transition: left 600ms;
+    background-color: #111;
+    color: #fff;
+    display: block;
+}
+
+#sidebar h1{
+    text-align: center;
+    padding: 20px;
+}
+
+#sidebar h2{
+    text-align: center;
+}
+
+#sidebar #links{
+    padding: 15px;
+    display: block;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
+
+#sidebar #links li{
+    display: inline-block;
+    padding: 10px;
+}
+
+#sidebar #links a{
+    text-decoration: none;
+    display: block;
+    color: var(--primary);
+    line-height: 0;
+    padding: 10px;
+    border: 3px solid var(--primary);
+    border-radius: 8px;
+    font-size: 3em;
+    transition: color 400ms, background-color 400ms;
+}
+
+#sidebar #links #webFacebook:hover{
+    color:#3B5998;
+    background-color: #fff;
+}
+#sidebar #links #webTwitter:hover{
+    color: #1dcaff;
+    background-color: #fff;
+}
+#sidebar #links #webInstagram:hover{
+    color: #458eff;
+    background-color: #fff;
 }
 
 main{

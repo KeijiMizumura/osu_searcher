@@ -424,3 +424,20 @@ function commentRank(r) {
         return "Highest PP Count";
     }
 }
+
+var myMessage = "Please try out this cool osu! search engine website called: https://keijimizumura.github.io/osu_searcher.github.io";
+
+document.getElementById('webFacebook').addEventListener('click',function(){
+    var url = "http://www.facebook.com/sharer.php?src=sp&u=https://keijimizumura.github.io/osu_searcher.github.io";
+    window.open(url, '_blank');
+});
+
+document.getElementById('webTwitter').addEventListener('click', function () {
+    var url = "http://twitter.com/home?status=" + myMessage;
+    window.open(url, '_blank');
+});
+
+document.getElementById('webInstagram').addEventListener('click', function () {
+    var url = "http://instagram.com";
+    window.open(url, '_blank');
+});
