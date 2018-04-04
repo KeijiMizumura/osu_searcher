@@ -8,20 +8,30 @@ document.getElementById("exit-search").addEventListener('click',function(){
 
 document.getElementById("search").addEventListener('click', showUser);
 
+var box = ``;
+
+var xhr = new XMLHttpRequest();
+
 // Shows user
 function showUser(){
     console.log("TEST");
-    var xhr = new XMLHttpRequest();
-    var user = document.getElementById('user').value;
-    xhr.open('GET', 'https://osu.ppy.sh/api/get_user?k=52ae0ab0149244476e7bcc8f297b665ea69a6020&u=' + user, true);
     
+    box = ``;
 
+    var userName = document.getElementById('user').value;
+
+    xhr.open('GET', 'https://osu.ppy.sh/api/get_user?k=52ae0ab0149244476e7bcc8f297b665ea69a6020&u=' + userName, true);
+      
+    // LOADING TOP SCORES
+
+    // LOADING PROFILE
     xhr.onload = function () {
         console.log("READYSTATE: ", xhr.readyState);
         if (this.status == 200) {
             var user = JSON.parse(this.responseText);
 
             var rank = numberWithCommas(user[0].pp_rank);
+            var rankComment = commentRank(user[0].pp_rank);
             var accuracy = toDecimal(user[0].accuracy);
             var accComment = commentAcc(user[0].accuracy);
             var performancePoint = numberWithCommas(user[0].pp_raw);
@@ -39,10 +49,10 @@ function showUser(){
                 `
                  <section id="top">
                     <img src="${avatar}" alt="avatar">
-                    <h1 id="username">${user[0].username}</h1>
-                    <h2 id="rank">#${rank}
-                        <span id="rank-comment">Pro</span>
-                    </h1>
+                    <h1 id="username">--${user[0].username}--</h1>
+                    <h2 id="rank">--- #${rank} ---<br><br>
+                        <span id="rank-comment">${rankComment}</span>
+                    </h2>
                 </section>
 
                 <section id="performance">
@@ -85,6 +95,10 @@ function showUser(){
             document.getElementById("result").innerHTML = output;
             document.getElementById("search-box").style.top = "-100vh";
             document.getElementById("user").value = "";
+
+            // Top Scores
+            printTopScore(user[0].username);
+
         }
         else if (this.status == 404) {
             document.getElementById('text').innerText = "404 NOT FOUND";
@@ -97,12 +111,140 @@ function showUser(){
     xhr.send();
 }
 
+
+
+function printTopScore(userid){
+
+    var xhr2 = new XMLHttpRequest();
+
+    xhr2.open('GET', 'https://osu.ppy.sh/api/get_user_best?k=52ae0ab0149244476e7bcc8f297b665ea69a6020&u=' + userid, true);
+
+    xhr2.onload = function () {
+        if (this.status == 200) {
+            var topScores = JSON.parse(this.responseText);
+            for(var i = 0; i < topScores.length; i++){
+               var beatmapid = topScores[i].beatmap_id;
+               getBeatmapName(beatmapid, topScores[i].pp, topScores[i].enabled_mods);
+                console.log(topScores[i].enabled_mods);
+            }
+        }
+    }
+    xhr2.send();
+}
+
+
+
+function getBeatmapName(beatid, pp, modd){   
+    
+    var xhr3 = new XMLHttpRequest();
+    xhr3.open('GET','https://osu.ppy.sh/api/get_beatmaps?k=52ae0ab0149244476e7bcc8f297b665ea69a6020&b=' + beatid, true);
+
+    xhr3.onload = function(){
+        if(this.status == 200){
+            var beatmapInfo = JSON.parse(this.responseText);
+            var text = beatmapInfo[0].title;
+            var ver = beatmapInfo[0].version;
+            var text2 = text.toString();
+            var ver2 = ver.toString();
+            console.log(text2);
+            var currmod = seeMod(+modd);
+
+            box += `
+                <div class="box">
+                    <h1>${text2} <span id="mods">${currmod}</span></h1>
+                    <h2>${ver2}</h2>
+                    <p>${toDecimal(pp)}PP</p>
+                </div>
+            `;
+
+            var input = `
+               <section id="top-plays">
+                    <h1>Top Plays</h1>
+                    <div class="boxes">
+                        ${box}
+                    </div>  
+            </section>
+            `;
+
+            document.getElementById("bottom-result").innerHTML = input;
+        }
+    }
+    xhr3.send();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// OTHER FUNCTIONS
+
 const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 function toDecimal(num){
     return Math.round(num * 100) / 100;
+}
+
+function seeMod(mod){
+    switch(mod){
+        case 0:
+            return "";
+        break;
+        case 1:
+            return "+NF";
+        break;
+        case 2:
+            return "+EZ";
+        break;
+        case 8:
+            return "+HD";
+        break;
+        case 16:
+            return "+HR";
+        case 32:
+            return "+SD";
+        break;
+        case 64:
+            return "+DT";
+        break;
+        case 256:
+            return "+HT";
+        break;
+        case 512:
+            return "+NC";
+        break;
+        case 1024:
+            return "+FL";
+        break;
+        
+        case 24:
+            return "+HDHR";
+        break;
+        case 72:
+            return "+HDDT";
+        break;
+        case 80:
+            return "+HRDT";
+        break;
+        case 88:
+            return "+HDHRDT";
+        break;
+        case 520:
+            return "+HDNC";
+        break;
+        case 528:
+            return "+HRNC";
+        break;
+    }
+    
 }
 
 function commentPP(pp) {
@@ -213,5 +355,53 @@ function commentPlay(num){
     }
     else if(num < 1000000){
         return "Beyond Farmer";
+    }
+}
+
+function commentRank(r) {
+    if (r > 1000000) {
+        return "Inactive";
+    }
+    else if (r > 500000) {
+        return "Noob";
+    }
+    else if (r > 100000) {
+        return "Young";
+    }
+    else if (r > 90000){
+        return "6 Digit No More";
+    }
+    else if(r > 10000){
+        return "5 Digit No More";
+    }
+    else if(r > 1000){
+        return "Pro!";
+    }
+    else if(r > 100){
+        return "Monster!";
+    }
+    else if(r > 50){
+        return "Insane!";
+    }
+    else if(r > 10){
+        return "Demon!";
+    }
+    else if(r > 5){
+        return "Killer!";
+    }
+    else if(r == 5){
+        return "Noob player";
+    }
+    else if(r == 4){
+        return "Ordinary Farmer";
+    }
+    else if(r == 3){
+        return "DT Farmer";
+    }
+    else if(r == 2){
+        return "It's Okay";
+    }
+    else if(r == 1){
+        return "Highest PP Count";
     }
 }
