@@ -6,6 +6,21 @@ document.getElementById("exit-search").addEventListener('click',function(){
     document.getElementById("search-box").style.top = "-100vh";
 });
 
+var toggle = 1;
+
+document.getElementById("show-share").addEventListener('click',function(){
+    if(toggle == 0){
+        document.querySelector('main').style.left = "0%";
+        document.getElementById('sidebar').style.left = "-60%";
+        toggle = 1;
+    }
+    else{
+        document.querySelector('main').style.left = "60%";
+        document.getElementById('sidebar').style.left = "0%";
+        toggle = 0;
+    }    
+});
+
 document.getElementById("search").addEventListener('click', showUser);
 
 var box = ``;
@@ -14,7 +29,6 @@ var xhr = new XMLHttpRequest();
 
 // Shows user
 function showUser(){
-    console.log("TEST");
     
     box = ``;
 
@@ -26,9 +40,10 @@ function showUser(){
 
     // LOADING PROFILE
     xhr.onload = function () {
-        console.log("READYSTATE: ", xhr.readyState);
         if (this.status == 200) {
             var user = JSON.parse(this.responseText);
+            
+            document.getElementById('share-box').style.display = 'block';
 
             var rank = numberWithCommas(user[0].pp_rank);
             var rankComment = commentRank(user[0].pp_rank);
@@ -57,19 +72,19 @@ function showUser(){
 
                 <section id="performance">
                 <div class="pp">
-                    <h1>Performance Point</h1>
+                    <h1>Performance Point <i class="fa fa-chart-line"></i></h1>
                     <hr>
                     <p>${performancePoint}pp <span id="pp-comment">${ppComment}</span></p>
                 </div>
                 <div class="pp">
-                    <h1>Accuracy</h1>
+                    <h1>Accuracy <i class="fa fa-bullseye"></i></h1>
                     <hr>
                     <p>${accuracy}%
                         <span id="pp-comment">${accComment}</span>
                     </p>
                 </div>
                 <div class="pp">
-                    <h1>Playcount</h1>
+                    <h1>Playcount <i class="fa fa-sort-numeric-up"></i></h1>
                     <hr>
                     <p>${playCount}
                         <span id="pp-comment">${playComment}</span>
@@ -117,7 +132,7 @@ function printTopScore(userid){
 
     var xhr2 = new XMLHttpRequest();
 
-    xhr2.open('GET', 'https://osu.ppy.sh/api/get_user_best?k=52ae0ab0149244476e7bcc8f297b665ea69a6020&u=' + userid, true);
+    xhr2.open('GET', 'https://osu.ppy.sh/api/get_user_best?k=52ae0ab0149244476e7bcc8f297b665ea69a6020&u=' + userid + "&m=0&limit=50", true);
 
     xhr2.onload = function () {
         if (this.status == 200) {
@@ -125,7 +140,6 @@ function printTopScore(userid){
             for(var i = 0; i < topScores.length; i++){
                var beatmapid = topScores[i].beatmap_id;
                getBeatmapName(beatmapid, topScores[i].pp, topScores[i].enabled_mods);
-                console.log(topScores[i].enabled_mods);
             }
         }
     }
@@ -138,22 +152,24 @@ function getBeatmapName(beatid, pp, modd){
     
     var xhr3 = new XMLHttpRequest();
     xhr3.open('GET','https://osu.ppy.sh/api/get_beatmaps?k=52ae0ab0149244476e7bcc8f297b665ea69a6020&b=' + beatid, true);
-
+    console.log('https://osu.ppy.sh/api/get_beatmaps?k=52ae0ab0149244476e7bcc8f297b665ea69a6020&b='+beatid);
     xhr3.onload = function(){
         if(this.status == 200){
             var beatmapInfo = JSON.parse(this.responseText);
             var text = beatmapInfo[0].title;
             var ver = beatmapInfo[0].version;
+            var diff = toDecimal(beatmapInfo[0].difficultyrating);
             var text2 = text.toString();
             var ver2 = ver.toString();
-            console.log(text2);
             var currmod = seeMod(+modd);
 
             box += `
                 <div class="box">
                     <h1>${text2} <span id="mods">${currmod}</span></h1>
                     <h2>${ver2}</h2>
-                    <p>${toDecimal(pp)}PP</p>
+                    <hr>
+                    <h1 id="star">${diff} <i class="fa fa-star"></i></h1>
+                    <p>${toDecimal(pp)}<span id="perf"> PP</span></p>
                 </div>
             `;
 
@@ -372,6 +388,9 @@ function commentRank(r) {
         return "6 Digit No More";
     }
     else if(r > 10000){
+        return "Can't Stop Farming";
+    }
+    else if(r > 9000){
         return "5 Digit No More";
     }
     else if(r > 1000){
