@@ -23,6 +23,8 @@ document.getElementById("show-share").addEventListener('click',function(){
 
 document.getElementById("search").addEventListener('click', showUser);
 
+var outSideId = '';
+
 var box = ``;
 
 var xhr = new XMLHttpRequest();
@@ -38,6 +40,10 @@ function showUser(){
       
     // LOADING TOP SCORES
 
+    xhr.onprogress = function(){
+        console.log('loading...');
+    }
+
     // LOADING PROFILE
     xhr.onload = function () {
         if (this.status == 200) {
@@ -51,6 +57,8 @@ function showUser(){
             var accComment = commentAcc(user[0].accuracy);
             var performancePoint = numberWithCommas(user[0].pp_raw);
             var ppComment = commentPP(user[0].pp_raw);
+
+            outSideId = user[0].user_id;
 
             var playCount = numberWithCommas(user[0].playcount);
             var playComment = commentPlay(user[0].playcount);
@@ -114,7 +122,6 @@ function showUser(){
                 `;
             document.getElementById("result").innerHTML = output;
             document.getElementById("search-box").style.top = "-100vh";
-            document.getElementById("user").value = "";
 
             // Top Scores
             printTopScore(user[0].username);
@@ -129,8 +136,8 @@ function showUser(){
         }
     }
     xhr.send();
-}
 
+}
 
 
 function printTopScore(userid){
@@ -157,7 +164,6 @@ function getBeatmapName(beatid, pp, modd){
     
     var xhr3 = new XMLHttpRequest();
     xhr3.open('GET','https://osu.ppy.sh/api/get_beatmaps?k=52ae0ab0149244476e7bcc8f297b665ea69a6020&b=' + beatid, true);
-    console.log('https://osu.ppy.sh/api/get_beatmaps?k=52ae0ab0149244476e7bcc8f297b665ea69a6020&b='+beatid);
     xhr3.onload = function(){
         if(this.status == 200){
             var beatmapInfo = JSON.parse(this.responseText);
@@ -179,12 +185,13 @@ function getBeatmapName(beatid, pp, modd){
             `;
 
             var input = `
-               <section id="top-plays">
+                <section id="top-plays">
                     <h1>Top Plays</h1>
+                    <h2><a href="#" onclick="reloadStuff()">CLICK HERE IF NOT IN ORDER</a></h2>
                     <div class="boxes">
                         ${box}
                     </div>  
-            </section>
+                </section>
             `;
 
             document.getElementById("bottom-result").innerHTML = input;
@@ -193,6 +200,10 @@ function getBeatmapName(beatid, pp, modd){
     xhr3.send();
 }
 
+function reloadStuff(){
+    console.log('test');
+    showUser();
+}
 
 
 
@@ -443,6 +454,26 @@ document.getElementById('webTwitter').addEventListener('click', function () {
 });
 
 document.getElementById('webInstagram').addEventListener('click', function () {
+    var url = "http://instagram.com";
+    window.open(url, '_blank');
+});
+
+// ACCOUNT INFO SHARING
+
+document.getElementById('accFacebook').addEventListener('click', function () {
+    var url = `http://www.facebook.com/sharer.php?src=sp&u=https://osu.ppy.sh/u/${outSideId}`;
+    window.open(url, '_blank');
+});
+
+document.getElementById('accTwitter').addEventListener('click', function () {
+    var myMessage = `Hello, my name is ${document.getElementById('username').innerText}, visit this page: https://osu.ppy.sh/u/${outSideId} to see more!
+    `;
+
+    var url = "http://twitter.com/home?status=" + myMessage;
+    window.open(url, '_blank');
+});
+
+document.getElementById('accInstagram').addEventListener('click', function () {
     var url = "http://instagram.com";
     window.open(url, '_blank');
 });

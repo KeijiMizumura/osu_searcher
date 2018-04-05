@@ -96,6 +96,19 @@ body{
     background-color: #fff;
 }
 
+#sidebar #links #accFacebook:hover{
+    color:#3B5998;
+    background-color: #fff;
+}
+#sidebar #links #accTwitter:hover{
+    color: #1dcaff;
+    background-color: #fff;
+}
+#sidebar #links #accInstagram:hover{
+    color: #458eff;
+    background-color: #fff;
+}
+
 main{
     position: absolute;
     left: 0%;
@@ -356,6 +369,26 @@ header h1{
     padding: 10px;
     color: #fff;
     font-size: 1.7em;
+}
+
+#top-plays h2{
+    text-align: center;
+    margin: 5px;
+    padding: 5px;
+    font-size: 1em;
+}
+#top-plays h2 a{
+    color: #fff;
+    text-decoration: none;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    padding: 3px 10px;
+    transition: background 300ms;
+}
+
+#top-plays h2 a:hover{
+    color: var(--hover);
+    background-color: #fff;
 }
 
 #top-plays .box{
