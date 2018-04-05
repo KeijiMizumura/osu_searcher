@@ -72,6 +72,11 @@ function showUser(){
 
                 <section id="performance">
                 <div class="pp">
+                    <h1>Visit Osu! Account</i></h1>
+                    <hr>
+                    <a id="link" href="https://osu.ppy.sh/u/${user[0].username}" target="_blank">${user[0].username}'s Account</a>
+                </div>
+                <div class="pp">
                     <h1>Performance Point <i class="fa fa-chart-line"></i></h1>
                     <hr>
                     <p>${performancePoint}pp <span id="pp-comment">${ppComment}</span></p>
@@ -440,4 +445,32 @@ document.getElementById('webTwitter').addEventListener('click', function () {
 document.getElementById('webInstagram').addEventListener('click', function () {
     var url = "http://instagram.com";
     window.open(url, '_blank');
+});
+
+// THEME CHANGER
+
+var trigger = false;
+
+document.getElementById('adjust-btn').addEventListener('click',function(e){
+    e.preventDefault();
+    if(trigger){
+        this.style.color = "#fff";
+        document.querySelector('body').style.backgroundColor = "#444";
+        document.getElementById('search-box').style.backgroundColor = "#222";
+        document.getElementById('search-box').style.color = "#fff";
+        document.querySelector('#search-box input').style.border = "2px solid #222";
+        document.getElementById('sidebar').style.backgroundColor = "#111";
+        document.getElementById('sidebar').style.color = "#fff";
+        trigger = false;
+    }
+    else{
+        this.style.color = "#111";
+        document.querySelector('body').style.backgroundColor = "#f1f1f1";
+        document.getElementById('search-box').style.backgroundColor = "#fff";
+        document.getElementById('search-box').style.color = "#111";
+        document.querySelector('#search-box input').style.border = "2px solid #a155e8";
+        document.getElementById('sidebar').style.backgroundColor = "#fff";
+        document.getElementById('sidebar').style.color = "#111";
+        trigger = true;
+    } 
 });
