@@ -47,6 +47,7 @@ function showUser(){
     // LOADING PROFILE
     xhr.onload = function () {
         if (this.status == 200) {
+            document.querySelector('.footer-gap').style.display = "none";
             var user = JSON.parse(this.responseText);
             
             document.getElementById('share-box').style.display = 'block';
@@ -175,7 +176,7 @@ function getBeatmapName(beatid, pp, modd){
             var currmod = seeMod(+modd);
 
             box += `
-                <div class="box">
+                <div class="box" id="box-model">
                     <h1>${text2} <span id="mods">${currmod}</span></h1>
                     <h2>${ver2}</h2>
                     <hr>
@@ -485,6 +486,7 @@ var trigger = false;
 document.getElementById('adjust-btn').addEventListener('click',function(e){
     e.preventDefault();
     if(trigger){
+        // DARK
         this.style.color = "#fff";
         document.querySelector('body').style.backgroundColor = "#444";
         document.getElementById('search-box').style.backgroundColor = "#222";
@@ -495,6 +497,7 @@ document.getElementById('adjust-btn').addEventListener('click',function(e){
         trigger = false;
     }
     else{
+        // LIGHT
         this.style.color = "#111";
         document.querySelector('body').style.backgroundColor = "#f1f1f1";
         document.getElementById('search-box').style.backgroundColor = "#fff";

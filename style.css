@@ -126,6 +126,17 @@ header{
     position: fixed;
     width: 100%;
     top: 0;
+    animation-name: showNav;
+    animation-duration: 1s;
+}
+
+@keyframes showNav{
+    from{
+        top: -100px;
+    }
+    100%{
+        top: 0px;
+    }
 }
 
 header .logo{
@@ -136,7 +147,26 @@ header img{
     width: 50px;
     height: 50px;
     padding-top: 10px;
+    animation-name: beat;
+    animation-duration: 750ms;
+    animation-iteration-count: infinite;
 }
+
+@keyframes beat{
+    0%{
+        transform: scale(1);
+    }
+    25%{
+        transform: scale(1.1);
+    }
+    75%{
+        transform: scale(1.1);
+    }
+    100%{
+        transform: scale(1);
+    }
+}
+
 
 header h1{
     line-height: 70px;
@@ -148,7 +178,23 @@ header h1{
 
 .search{
     position: absolute;
+    opacity: 0;
     right: 0px;
+    animation-name: animSearch;
+    animation-delay: 1s;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes animSearch{
+    from{
+        opacity: 1;
+        right: -100px;
+    }
+    100%{
+        opacity: 1;
+        right: 0px;
+    }
 }
 
 .search h1{
@@ -218,6 +264,9 @@ header h1{
 
 #search-box input{
     text-align: center;
+    font-size: 1.2em;
+    font-family: 'Raleway', sans-serif;
+    border: 1px solid var(--hover);
 }
 
 #search-box button{
@@ -433,6 +482,11 @@ header h1{
     color: var(--primary);
 }
 
+
+.footer-gap{
+    height: calc(100vh - 55px);
+    width: 100%;
+}
 
 
 footer{
