@@ -584,3 +584,42 @@ footer{
         font-size: .7em;
     }
 }
+
+@media(min-width: 768px){
+    #result{
+        display: grid;
+        grid-template-columns: auto auto;
+        align-items: stretch;
+        grid-gap: 5px;
+    }
+    #top{
+        grid-column: 1/2;
+        grid-row: 1/2;
+    }
+    #performance{
+        margin-top: 70px;
+        grid-row: 1/4;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        
+    }
+    #performance .pp{
+    }
+    #ranks{
+        grid-column: 1/2;
+        grid-row: 2/3;
+    }
+    #box-model h1, #box-model p, #box-model h2{
+        text-align: left;
+        padding-left: 25px;
+    }
+    #box-model p{
+        display: block;
+        padding-left: 25px !important;
+        font-size: 1em !important;
+    }
+    #top-plays{
+        width: 70%;
+    }
+}
