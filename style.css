@@ -481,6 +481,36 @@ header h1{
     font-size: 0.7em;
     color: var(--primary);
 }
+/* Navigation Area */
+#modes{
+    padding: 5px;
+}
+
+#modes ul{
+    display: flex;
+    list-style-type: none;
+    justify-content: space-evenly;
+    text-align: center;
+    height: 50px;
+}
+#modes ul li{
+    width: 110px;
+    line-height: 50px;
+}
+#modes ul li a{
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    border: 3px solid var(--primary);
+    font-size: .9em;
+    border-radius: 15px;
+    background-color: #111;
+    transition: background-color 400ms;
+    font-weight: 600;
+}
+#modes ul li a:hover{
+    background-color: var(--hover);
+}
 
 
 .footer-gap{

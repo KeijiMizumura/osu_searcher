@@ -6,7 +6,30 @@ document.getElementById("exit-search").addEventListener('click',function(){
     document.getElementById("search-box").style.top = "-100vh";
 });
 
+var mode = 0;
+
+document.getElementById("navigation-area").style.display = "none";
+
+document.getElementById("osuBtn").addEventListener('click', function(){
+    mode = 0;
+    showUser();
+});
+document.getElementById("taikoBtn").addEventListener('click', function () {
+    mode = 1;
+    showUser();
+});
+document.getElementById("ctbBtn").addEventListener('click', function () {
+    mode = 2;
+    showUser();
+});
+document.getElementById("maniaBtn").addEventListener('click', function () {
+    mode = 3;
+    showUser();
+});
+
 var toggle = 1;
+
+
 
 document.getElementById("show-share").addEventListener('click',function(){
     if(toggle == 0){
@@ -36,7 +59,7 @@ function showUser(){
 
     var userName = document.getElementById('user').value;
 
-    xhr.open('GET', 'https://osu.ppy.sh/api/get_user?k=52ae0ab0149244476e7bcc8f297b665ea69a6020&u=' + userName, true);
+    xhr.open('GET', 'https://osu.ppy.sh/api/get_user?k=52ae0ab0149244476e7bcc8f297b665ea69a6020&u=' + userName + '&m=' + mode, true);
       
     // LOADING TOP SCORES
 
@@ -121,7 +144,9 @@ function showUser(){
                 </div>
             </section>   
                 `;
+
             document.getElementById("result").innerHTML = output;
+            document.getElementById("navigation-area").style.display = "block";
             document.getElementById("search-box").style.top = "-100vh";
 
             // Top Scores
@@ -145,7 +170,7 @@ function printTopScore(userid){
 
     var xhr2 = new XMLHttpRequest();
 
-    xhr2.open('GET', 'https://osu.ppy.sh/api/get_user_best?k=52ae0ab0149244476e7bcc8f297b665ea69a6020&u=' + userid + "&m=0&limit=50", true);
+    xhr2.open('GET', 'https://osu.ppy.sh/api/get_user_best?k=52ae0ab0149244476e7bcc8f297b665ea69a6020&u=' + userid + "&m=0&limit=50&m=" + mode, true);
 
     xhr2.onload = function () {
         if (this.status == 200) {
@@ -181,7 +206,7 @@ function getBeatmapName(beatid, pp, modd){
                     <h2>${ver2}</h2>
                     <hr>
                     <h1 id="star">${diff} <i class="fa fa-star"></i></h1>
-                    <p>${toDecimal(pp)}<span id="perf"> PP</span></p>
+                    <p class="ppValue">${toDecimal(pp)}<span id="perf"> PP</span></p>
                 </div>
             `;
 
